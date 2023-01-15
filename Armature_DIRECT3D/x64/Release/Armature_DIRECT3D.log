@@ -1,0 +1,34 @@
+﻿  main.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(485,53): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(489,57): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(495,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(708,23): warning C4244: '=': conversion from 'int' to 'FLOAT', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(709,24): warning C4244: '=': conversion from 'int' to 'FLOAT', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(774,105): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(778,28): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(854,42): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(855,42): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(858,50): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(916,22): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(917,21): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(918,21): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(920,24): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(921,24): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(988,23): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(1036,96): warning C4244: 'argument': conversion from 'double' to 'UINT8', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(1275,35): warning C4244: '=': conversion from 'UINT' to 'FLOAT', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(1276,36): warning C4244: '=': conversion from 'UINT' to 'FLOAT', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(1281,108): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(1357,34): warning C4244: '=': conversion from 'UINT' to 'FLOAT', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(1358,35): warning C4244: '=': conversion from 'UINT' to 'FLOAT', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\Armature_DIRECT3D\src_files\main.cpp(1363,107): warning C4305: 'argument': truncation from 'double' to 'float'
+     Creating library C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\x64\Release\Armature_DIRECT3D.lib and object C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\x64\Release\Armature_DIRECT3D.exp
+  Generating code
+  3 of 798 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+DirectXTK.lib(pch.obj) : warning LNK4099: PDB 'DirectXTK.pdb' was not found with 'DirectXTK.lib(pch.obj)' or at 'C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\x64\Release\DirectXTK.pdb'; linking object as if no debug info
+DirectXTK.lib(WICTextureLoader.obj) : warning LNK4099: PDB 'DirectXTK.pdb' was not found with 'DirectXTK.lib(WICTextureLoader.obj)' or at 'C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\x64\Release\DirectXTK.pdb'; linking object as if no debug info
+  Armature_DIRECT3D.vcxproj -> C:\Users\pawel\Documents\PRACA\PORTFOLIO\Armature_DIRECT3D\x64\Release\Armature_DIRECT3D.exe
