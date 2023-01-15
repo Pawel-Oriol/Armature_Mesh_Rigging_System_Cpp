@@ -5,7 +5,7 @@ A blender file of the used 3D animated model and blender exporters written in py
 You can watch a demo vid of this project under the following adress:
 https://www.youtube.com/watch?v=yJpmEfbqp9k&t=47s
 
-Uses Direct3D11 and DirectXTK (both properties of Microsoft Corp - please visit the DirectXTK subfolder for the respective the license):
+Uses Direct3D11 and DirectXTK (both owned by Microsoft Corp - please visit the Armature_DIRECT3D/DirectXTK subfolder for the respective the license):
 https://github.com/microsoft/DirectXTK
 
 Model & Animation:
