@@ -1,29 +1,31 @@
 ﻿//Copyright © 2023 by Pawel Oriol
 
-//Program testujacy biblioteke implementujaca system armatury wraz z rigiem mesha
-//Wersja stabilna, ale prototypowa, niezoptymalizowana pod katem wydajnosci
-//wczytuje armature i wagi mesha zapisane w formacie autorskim eskportowane z blendera
-//przy uzyciu wlasnego exportera. Mesh wczystywany jest z plikow w formacie *.obj
-//Link do demonstracji dzialania programu:
+//A C++ Implementation of The Armature and Mesh Rigging System from scratch.
+//A blender file of the used 3D animated model and blender expoters writeen in python by the author are also included in this project.
+//You can watch the demo video of this project under the following adress :
+//https://www.youtube.com/watch?v=yJpmEfbqp9k&t=47s
+
+//Uses Direct3D11and DirectXTK(both properties of Microsoft Corp - Visit the DirectXTK subfolder for the respective the license) :
+//https://github.com/microsoft/DirectXTK
+// 
+//Model& Animation :
+//Megan & Walkcycle2 obtained from mixamo.com :
+//https ://www.mixamo.com/#/?page=1&query=walk&type=Character
 //https://www.youtube.com/watch?v=yJpmEfbqp9k
 
-//Model i animacja pobrane z mixamo (model "Megan", animacja "Walk2"):
-//https://www.mixamo.com/#/?page=1&query=walk&type=Character
 
-//Sterowanie: Myszka + WSAD
-//Tryby wyswietlania. (Wszystkie "Toggle'owane"): 
-//F1 - tryb wire/solid
-//F2 - texture/single color
-//F3 - hide/show mesha
-//F4 - hide/show armatury
+//Controls: Mouse + WSAD keys
+//Display modes: 
+//F1 - Toggle wire/solid mode
+//F2 - Toggle texture/single color
+//F3 - Toggle hide/show mesha
+//F4 - Toggle hide/show armatury
 
-//biblioteki windows sdk
+//windows sdk libraries
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-//bibilioteki ulatwiajace korzystanie z czesci funkcjonalnosci DirectX (glownie wczystywanie image'y w roznych formatach), 
-// zbudowane w oparciu o kod pozyskany z:
-//https://github.com/microsoft/DirectXTK
+
 
 #ifdef _DEBUG
 #pragma comment(lib, "DirectXTK/DirectXTK_debug.lib")
@@ -76,7 +78,7 @@ extern "C"
 }
 
 
-//obiekty COM
+//COM objects
 ID3D11Device* Device;
 ID3D11DeviceContext* DevCon;
 IDXGISwapChain* SwapChain;
@@ -470,8 +472,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	LPSTR lpCmdLine,
 	int nShowCmd)
 {
-	//musimy poinformowac Compositing Window Managera, ze to my
-	//bedziemy decydowac o rozmiarach naszego okna, a nie on!
+	//We must inform The Compositing Window Manager, that we shall decide on the resolution of our window
+	//and not him!
 	bool dpiAware = SetProcessDPIAware();
 
 	InitAdaptersList();
