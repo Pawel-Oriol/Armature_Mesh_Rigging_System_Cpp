@@ -1,12 +1,18 @@
 ﻿//Copyright © 2023 by Pawel Oriol
 
+//A C++ Implementation of The Armature and Mesh Rigging System "from scratch".
+//A blender file of the used 3D animated model and blender exporters written in Python by the author are also included in this project.
+//You can watch the demo video of this project under the following adress:
+//https://www.youtube.com/watch?v=yJpmEfbqp9k&t=47s
 
-//Biblioteka implementujaca system armatury wraz z rigiem mesha
-//Wersja stabilna, ale prototypowa, niezoptymalizowana pod katem wydajnosci
-//wczytuje armature i wagi mesha zapisane w formacie autorskim eskportowanego z blendera
-//przy uzyciu wlasnego exportera mesh wczystywany jest z plikow w formacie *.obj
-//Link do demonstracji dzialania programu:
+//Uses Direct3D11 and DirectXTK(both properties of Microsoft Corp - Visit the DirectXTK subfolder for the respective license):
+//https://github.com/microsoft/DirectXTK
+// 
+//Model& Animation :
+//Megan & Walkcycle2 obtained from mixamo.com:
+//https://www.mixamo.com/#/?page=1&query=walk&type=Character
 //https://www.youtube.com/watch?v=yJpmEfbqp9k
+
 
 
 #include "3D_lib.h"
@@ -345,7 +351,7 @@ void Object3D::Load(ID3D11Device* devicePtr, const char* fname, bool vertexGroup
 
 	//////////////face data ////////////////////////////////
 
-	//wczytaj pierwsza linie
+	
 	line_ptr = fgets(line, 256, file);
 
 	int num_polys = 0;
@@ -373,7 +379,7 @@ void Object3D::Load(ID3D11Device* devicePtr, const char* fname, bool vertexGroup
 		line_ptr = fgets(line, 256, file);
 	}
 
-	//odejmij 1 od kazdego indeksu, jako, ze blender numeruje od jedynki
+	//substract 1 from every index since blender enumerates from 1 and not 0
 	for (int vi = 0; vi < num_polys * 3 * 3; vi++)
 	{
 		this->indexList[vi] -= 1;
@@ -422,7 +428,7 @@ void Object3D::LoadTexture(ID3D11Device* devicePtr, ID3D11DeviceContext* devConP
 }
 
 
-
+//translation by a vector of all the vertices
 void Object3D::TranslateByVector(float* vec)
 {
 	for (int vi = 0; vi < this->numVertices; vi++)
@@ -433,7 +439,7 @@ void Object3D::TranslateByVector(float* vec)
 	}
 }
 
-//obrot obiektu o kwaternion
+//rotation by a queternion of all the vertices
 void Object3D::RotateByQuaternion(Quaternion* q)
 {
 	for (int vi = 0; vi < this->numVertices; vi++)
@@ -442,7 +448,7 @@ void Object3D::RotateByQuaternion(Quaternion* q)
 	}
 
 }
-//translacja obiektu o wektor oraz obrot obiektu o kwaternion
+//combined rotation and translation
 void Object3D::RotateAndTranslate(Quaternion* q, float* vec)
 {
 	for (int vi = 0; vi < this->numVertices; vi++)
@@ -457,7 +463,7 @@ void Object3D::RotateAndTranslate(Quaternion* q, float* vec)
 }
 
 
-//skalowanie obiektu
+
 void Object3D::Scale(float scale_factor)
 {
 	for (int vi = 0; vi < this->numVertices; vi++)
@@ -469,16 +475,18 @@ void Object3D::Scale(float scale_factor)
 	}
 }
 
-//metoda liczaca wektory normalne na nowo
+//The algorithm is the same as the one used in Blender for smooth shading - the wider the angle 
+//is between the edges originating from the vertex the greater the influence the triangle will have on the
+//final values of the normal coordinates for this vertex
 void Object3D::RecalculateNormals()
 {
-	//petla po trojkatach
+	
 	for (int pi = 0; pi < this->numVertices / 3; pi++)
 	{
 		float u[3], v[3], normal_temp[3];
 		int normal_index;
 
-		//pobierz vertexy
+		
 		float v0[3];
 		float v1[3];
 		float v2[3];
@@ -491,20 +499,21 @@ void Object3D::RecalculateNormals()
 		memcpy(v1, &this->vTrans[pi * 3 + 1].pos.x, sizeof(float) * 3);
 		memcpy(v2, &this->vTrans[pi * 3 + 2].pos.x, sizeof(float) * 3);
 
-		//pierwszy vertex (v0)
+		
 		SubVectors(v0, v2, u, 3);
 		SubVectors(v0, v1, v, 3);
 
 		NormalizeVector(u, u, 3);
 		NormalizeVector(v, v, 3);
 
-		//normalny tylko raz trzeba policzyc, i tylko normalziowac i skalowac od nowa, ale na razie liczymy od nowa
+		
 		CrossVectors(v, u, normal_temp);
 		NormalizeVector(normal_temp, normal_temp, 3);
 
 		float dot_u_v = DotVectors(u, v, 3);
 		float alpha = acos(dot_u_v);
 
+		//the wider the angle the greater the influence
 		ScaleVector(normal_temp, alpha, 3);
 
 		normal_index = this->indexList[pi * 9 + 2 + 0];
@@ -512,14 +521,14 @@ void Object3D::RecalculateNormals()
 		AddVectors(&this->normalListTrans[normal_index * 3], normal_temp, &this->normalListTrans[normal_index * 3], 3);
 
 
-		//drugi vertex (v1)
+		
 		SubVectors(v1, v0, u, 3);
 		SubVectors(v1, v2, v, 3);
 
 		NormalizeVector(u, u, 3);
 		NormalizeVector(v, v, 3);
 
-		//normalny tylko raz trzeba policzyc, i tylko normalziowac i skalowac od nowa, ale na razie liczymy od nowa
+		//this cross vector yields the same result as the first one - feel free to remove it
 		CrossVectors(v, u, normal_temp);
 		NormalizeVector(normal_temp, normal_temp, 3);
 
@@ -532,14 +541,14 @@ void Object3D::RecalculateNormals()
 
 		AddVectors(&this->normalListTrans[normal_index * 3], normal_temp, &this->normalListTrans[normal_index * 3], 3);
 
-		//trzeci vertex (v2)
+		
 		SubVectors(v2, v1, u, 3);
 		SubVectors(v2, v0, v, 3);
 
 		NormalizeVector(u, u, 3);
 		NormalizeVector(v, v, 3);
 
-		//normalny tylko raz trzeba policzyc, i tylko normalziowac i skalowac od nowa, ale na razie liczymy od nowa
+		//this cross vector yields the same result as the first and second one - feel free to remove it
 		CrossVectors(v, u, normal_temp);
 		NormalizeVector(normal_temp, normal_temp, 3);
 
@@ -553,14 +562,14 @@ void Object3D::RecalculateNormals()
 		AddVectors(&this->normalListTrans[normal_index * 3], normal_temp, &this->normalListTrans[normal_index * 3], 3);
 	}
 
-	//znormalizuj wszystkie wektory
+	
 	for (int ni = 0; ni < this->normalListTrans.size() / 3; ni++)
 	{
 		NormalizeVector(&this->normalListTrans[ni * 3], &this->normalListTrans[ni * 3], 3);
 	}
 
 
-	//ustaw wektory na liscie do renderowania
+	
 	for (int vi = 0; vi < this->numVertices; vi++)
 	{
 		int normal_index = this->indexList[vi * 3 + 2];
@@ -606,11 +615,13 @@ Bone::Bone(Bone&& other)
 }
 
 
-//liczenie finalnej orientacji wszystkich kosci
-//algorytm przebiega tak, ze najpierw kosc jest transformowana o
-//transformate basis, nastepnie local, nastepnie liczona jest jej pozycja
-//wzgledem rodzica i na koncu jest transformowana o pozycje ostateczna rodzica
-//ktora dopiero musimy rekursywnie policzyc
+
+//Compute the final tranformations of all the bones
+//It's a recursive process. For each bone it's final transformation equals: a composition of it's basis transformation, its local transformation,
+//the reverse local transformation of its parent  and it's parents final tranformation
+//(so we in turn need to compute it. The recursive process end's up once we arriave at the root bone).
+//For a better explanation check out this thread on blender.stackexchange.com (I could have never explained it better myself):
+//https://blender.stackexchange.com/questions/44637/how-can-i-manually-calculate-bpy-types-posebone-matrix-using-blenders-python-ap
 TransformPair Bone::ComputeFinalOrientationPos()
 {
 	Quaternion q_temp = HamiltonProd(this->qLocal, this->qBasisCurrent);
@@ -655,9 +666,11 @@ TransformPair Bone::ComputeFinalOrientationPos()
 
 }
 
-//Transformacja wierzcholka o przez kosc.
-//Najpierw liczona jest pozycja wierzcholka wzgledem kosci, gdy ta jest
-//w spoczynku, a nastepnie owa pozycja jest transformowana o pozycje finalna kosci
+//Transformation of a vertex by the bone. At first the relative position of a vertex to the bone is computed, when
+//the bone is in its "rest pose" and then this position is transformed by the final orientation and position of the bone.
+//A very innefficient way of doing it. The better way would be to convert all the translations and rotation to matrices
+//and stack them all together. Although I intended to keep this as simple as possible it can't be stressed enough
+//that this it the worst way of conducting this operation!
 void Bone::TransformVertexByBone(float* vSrc, float* vDst)
 {
 	float v_temp[3];
@@ -680,6 +693,7 @@ void Armature::ReleaseD3D()
 
 }
 
+//For better understading of the loading code please open and examine the file itself
 void Armature::Load(ID3D11Device* devicePtr, const char* filename, const char* modelFilename, bool anim)
 {
 	char line[256];
@@ -688,21 +702,21 @@ void Armature::Load(ID3D11Device* devicePtr, const char* filename, const char* m
 	fgets(line, 256, f);
 	sscanf(line, "%*s %d", &this->numBones);
 
-	//petla wczytujaca kosci
+	//loop over all the bones
 	for (int bi = 0; bi < this->numBones; bi++)
 	{
 
 		boneList.push_back(Bone());
 		Bone& curr_bone = boneList.back();
 
-		//wczytaj model obj kosci
+		//load the bone model
 		curr_bone.object3d.Load(devicePtr, modelFilename);
 
 		curr_bone.ID = bi;
-		//pomin te linie oddzielajaca
+		//skip this line
 		fgets(line, 256, f);
 
-		//linia z nazwa kosci
+		//bone name
 		fgets(line, 256, f);
 
 		char* start = std::find(line, line + strlen(line), ' ');
@@ -711,38 +725,38 @@ void Armature::Load(ID3D11Device* devicePtr, const char* filename, const char* m
 
 		curr_bone.name = std::string(start, end);
 
-		//linia z nazwa rodzica
+		//name of parent
 		fgets(line, 256, f);
 		start = line + strlen("Parent_ID: ");
 
 		curr_bone.parentName = std::string(start, strlen(start) - 1);
 
 
-		//linia z rozmiarami kosci
+		//size of the bone
 		fgets(line, 256, f);
 		sscanf(line, "%*s %f", &curr_bone.size);
 
-		//przeskaluj model kosci o rozmiar
+		//scale the bone 3D model by the obtained value
 		curr_bone.object3d.Scale(curr_bone.size);
 
-		//linia z orientacją lokalną
+		//local orientation
 		fgets(line, 256, f);
 		sscanf(line, "%*s %*s %f %f %f %f", &curr_bone.qLocal.w, &curr_bone.qLocal.x, &curr_bone.qLocal.y, &curr_bone.qLocal.z);
 
-		//linia z pozycją lokalną
+		//local pos
 		fgets(line, 256, f);
 		sscanf(line, "%*s %*s %f %f %f", &curr_bone.posLocal[0], &curr_bone.posLocal[1], &curr_bone.posLocal[2]);
 
-		//linia z orientacją basis
+		//orientation basis
 		fgets(line, 256, f);
 		sscanf(line, "%*s %*s %f %f %f %f", &curr_bone.qBasis.w, &curr_bone.qBasis.x, &curr_bone.qBasis.y, &curr_bone.qBasis.z);
 
-		//linia z pozycją basis
+		//pos basis
 		fgets(line, 256, f);
 		sscanf(line, "%*s %*s %f %f %f", &curr_bone.posBasis[0], &curr_bone.posBasis[1], &curr_bone.posBasis[2]);
 
 
-		//zamiana wspolrzednych z i y
+		//swap z i y (left handed coordinated system vs right handed)
 		float temp_coord;
 		temp_coord = curr_bone.qLocal.y;
 
@@ -763,11 +777,11 @@ void Armature::Load(ID3D11Device* devicePtr, const char* filename, const char* m
 
 
 		
-			
+		//loda bone animation frames
 		if (anim)
 		{
 
-			//wspolrzedna w (tutaj ustalamy tez ilosc klatek)
+			//read w values for all the frames
 			fgets(line, 256, f);
 			fgets(line, 256, f);
 			while (line[0] != 'x')
@@ -778,22 +792,22 @@ void Armature::Load(ID3D11Device* devicePtr, const char* filename, const char* m
 				fgets(line, 256, f);
 			}
 
-			//teraz wiemy juz ile frame'ow jest
+			//now we know how many frames there are
 			size_t temp_num_frames = curr_bone.frameList.size();
 
 			this->lastFrame = curr_bone.frameList.back().numFrame;
 
-			//wsporzedna "x"
+			//"x"
 			for (int fi = 0; fi < temp_num_frames; fi++)
 			{
 				FRAME& curr_frame = curr_bone.frameList[fi];
 				fgets(line, 256, f);
 				sscanf(line, "%f %*s %f", &curr_frame.numFrame, &curr_frame.orientation.x);
 			}
-			//pomin te linie
+			//skip
 			fgets(line, 256, f);
 
-			//wsporzedna "y"
+			//"y"
 			for (int fi = 0; fi < temp_num_frames; fi++)
 			{
 				FRAME& curr_frame = curr_bone.frameList[fi];
@@ -801,10 +815,10 @@ void Armature::Load(ID3D11Device* devicePtr, const char* filename, const char* m
 				sscanf(line, "%f %*s %f", &curr_frame.numFrame, &curr_frame.orientation.y);
 			}
 
-			//pomin te linie
+			//skip
 			fgets(line, 256, f);
 
-			//wsporzedna "z"
+			//"z"
 			for (int fi = 0; fi < temp_num_frames; fi++)
 			{
 				FRAME& curr_frame = curr_bone.frameList[fi];
@@ -812,7 +826,7 @@ void Armature::Load(ID3D11Device* devicePtr, const char* filename, const char* m
 				sscanf(line, "%f %*s %f", &curr_frame.numFrame, &curr_frame.orientation.z);
 			}
 
-			//zamiana y i z
+			//swap z i y (left handed coordinated system vs right handed)
 			for (int fi = 0; fi < temp_num_frames; fi++)
 			{
 				temp_coord = curr_bone.frameList[fi].orientation.y;
@@ -825,7 +839,7 @@ void Armature::Load(ID3D11Device* devicePtr, const char* filename, const char* m
 		
 	} 
 
-	//ustaw hierarchie kosci przypisujac wskazniki polom rodzicow kazdej kosci
+	//set the armature hierarchy by assinging each bone its parents via pointers
 	for (int bi = 0; bi < this->numBones; bi++)
 	{
 		Bone& curr_bone = this->boneList[bi];
@@ -852,15 +866,12 @@ void Armature::Animate(float progress)
 	}
 }
 
-//Metoda liczaca aktualna wartosc tranformaty basis
-//dla kazdej kosci znajdujemy dwie klatki pomiedzy ktorymi
-//akurat znajduje sie licznik aktualnego frame'a
-//i liczemy wartosc interpolowana miedzy tymi klatkami
-//gdzie wspolczynnikiem interpolacji bedzie procentowa 
-//odleglosc licznika od obu klatek
-//dla translacyjnej czesci tranformaty uzywamy LERP-a,
-//zas dla orientacyjnej - SLERP -a, jako, ze ten zachowuje
-//uniformowe tempo rotacji
+//This method computes the current value of the basis transformation.
+//For every bone we find two frames between which the current frame counter happens to
+//be and interpolate between them. The interpolation coefficient "t" of this interpolation
+//is the distance beetween the frame counter and the previous frame divided by the distance of these
+//two frames. The resulting interpolations (SLERP for orientation and LERP for position) constitute
+//the current basis transformation.
 void Armature::ComputeCurrBasis()
 {
 	for (int bi = 0; bi < this->numBones; bi++)
@@ -884,7 +895,7 @@ void Armature::ComputeCurrBasis()
 
 }
 
-//metoda liczaca ostateczne orientacje i pozycje kosci
+//a method computing the final orientations and positions of all the bones
 void Armature::ComputeFinalOrientationPos()
 {
 	for (int bi = 0; bi < this->numBones; bi++)
@@ -937,12 +948,11 @@ void Armature::AssignBoneIndicesToVertexGroups(Object3D* objPtr)
 
 }
 
-
-//algorytm transformuje kazdy vertex o transformate "reverse local" kosci
-//aby policzyc jego polozenie wzgledem niej gdy jest ona w "rest pose"
-//a nastepnie transformuje o jej ostateczna transformate
-//wszystkie transfomacje kosci ktore maja "udzialy w vertexie" zostaja finalnie zsumowane
-//z uwzglednieniem wag - suma wazona
+//The algorith is as follows:
+//Do for every vertex: Transform the vertex local (i.e. starting) position by TransformVertexByBone of every bone
+//that has any influence (i.e. weight) over it and multiply the result by the bones weight. Sum all the
+//results to achieve the final vertex position. Basically a weighted sum of all the transformations off all the bones
+//for that vertex.
 void Armature::MeshDeform(Object3D* objPtr)
 {
 	for (int vi = 0; vi < objPtr->vSkinnedList.size(); vi++)

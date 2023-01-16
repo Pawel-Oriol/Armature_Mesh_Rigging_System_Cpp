@@ -42,9 +42,9 @@ VS_OUTPUT VS(float4 inPos: POSITION, float2 inTexCoord: TEXCOORD, float3 inNorma
 float4 PS(VS_OUTPUT input) : SV_TARGET
 {
 	input.normal = normalize(input.normal);
-	//ambient na pierwszej pozycji
+	//ambient on the first position
 	float4 color = lights[0].bri*float4(1,1,1,1);
-	//swiatlo kierunkowe na drugiej pozycji
+	//directional light on the second position
 	color+=saturate(dot(lights[1].dir,input.normal)*lights[1].bri*float4(1,1,1,1));
 	color = saturate(color);
 	return color;

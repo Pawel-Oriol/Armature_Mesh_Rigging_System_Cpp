@@ -1,12 +1,18 @@
 ﻿//Copyright © 2023 by Pawel Oriol
 
+//A C++ Implementation of The Armature and Mesh Rigging System "from scratch".
+//A blender file of the used 3D animated model and blender expoters written in python by the author are also included in this project.
+//You can watch the demo video of this project under the following adress:
+//https://www.youtube.com/watch?v=yJpmEfbqp9k&t=47s
 
-//Biblioteka implementujaca system armatury wraz z rigiem mesha
-//Wersja stabilna, ale prototypowa, niezoptymalizowana pod katem wydajnosci
-//wczytuje armature i wagi mesha zapisane w formacie autorskim eskportowanego z blendera
-//przy uzyciu wlasnego exportera mesh wczystywany jest z plikow w formacie *.obj
-//Link do demonstracji dzialania programu:
+//Uses Direct3D11 and DirectXTK(both properties of Microsoft Corp - Visit the DirectXTK subfolder for the respective license):
+//https://github.com/microsoft/DirectXTK
+// 
+//Model& Animation:
+//Megan & Walkcycle2 obtained from mixamo.com:
+//https://www.mixamo.com/#/?page=1&query=walk&type=Character
 //https://www.youtube.com/watch?v=yJpmEfbqp9k
+
 
 
 #include <time.h>
@@ -79,6 +85,7 @@ float QuaternionDot(Quaternion* q1, Quaternion* q2);
 
 Quaternion QuaternionSlerp(Quaternion* q1, Quaternion* q2, float t);
 
+
 struct VertexGroup
 {
 public:
@@ -93,16 +100,24 @@ public:
 
 };
 
-//vertex niepowtarzalny przypisany do kości
-//posiada adresy vertexów odpowiadające mu na liście trójkatow do podmiany 
+
+//A structure representing a unique vertex for mesh rigging purposes.
+//As a vertex can be shared by many triangles and thus present many times on a vertex array 
+//(if the drawing is nonindexed as is the case in this implementation)
+//it's more efficient to have a unique instance of it for armature tranformation purposes and than copy
+//its current final coordinates to every adress on the vertex array when it is present
+//The adresses where to copy it are stored in vPointers
+//The copying is accomplished by the SetVertices() method;
 struct VertexSkinned
 {
 
 	float posLocal[3];
 	float posTrans[3];
 
+	//in this list are listed all the bones that affect the vertex transformations and the influence they have via weights
 	std::vector<VertexGroup> vGroups;
 	std::vector<DirectX::XMFLOAT3*> vPointers;
+
 
 	void SetVertices();
 	void LoadVertexGroups(std::vector <VertexSkinned>& vSkinnedList, const char* fname);
@@ -129,7 +144,7 @@ public:
 	ID3D11Buffer *dataBuffer = NULL;
 	ID3D11ShaderResourceView *objTexture = NULL;
 
-	//wywolac przed destruktorem!!
+	//we need to call it before destructor!
 	void ReleaseD3D();
 	Object3D();
 
@@ -142,20 +157,22 @@ public:
 
 	void LoadTexture(ID3D11Device* devicePtr, ID3D11DeviceContext* devConPtr, const wchar_t* fname);
 
-	//translacja obiektu o wektor
+	//translation by a vector of all the vertices
 	void TranslateByVector(float* vec);
 
-	//obrot obiektu o kwaternion
+	//rotation by a queternion of all the vertices
 	void RotateByQuaternion(Quaternion* q);
 
-	//translacja obiektu o wektor oraz obrot obiektu o kwaternion
+	//combined rotation and translation
 	void RotateAndTranslate(Quaternion* q, float* vec);
 
 
-	//skalowanie obiektu
+	
 	void Scale(float scale_factor);
 
-	//metoda liczaca wektory normalne na nowo
+	//The algorithm is the same as the one used in Blender for smooth shading - the wider the angle 
+	//is between the edges originating from the vertex the greater the influence the triangle will have on the
+	//final values of the normal coordinates for tihs vertex
 	void RecalculateNormals();
 	void DrawObject(ID3D11DeviceContext* devConPtr);
 
@@ -207,13 +224,20 @@ struct Bone
 
 	Bone(Bone&& other);
 
+	//Compute the final tranformations of all the bones
+	//It's a recursive process. For each bone it's final transformatin equals: a composition of it's basis transformation, reverse local transformation  
+	//and it's parents final tranformation (so we in turn need to compute is. The recursive process end's up once we arriave at the root bone).
+	//For a better explanation check this thread on blender.stackexchange.com (I could never have explained it better myself):
+	//https://blender.stackexchange.com/questions/44637/how-can-i-manually-calculate-bpy-types-posebone-matrix-using-blenders-python-ap
 	TransformPair ComputeFinalOrientationPos();
 
-	//Transformacja wierzcholka o przez kosc.
-	//Najpierw liczona jest pozycja wierzcholka wzgledem kosci, gdy ta jest
-	//w spoczynku, a nastepnie owa pozycja jest transformowana o pozycje finalna kosci
-	//Bardzo zle rozwiazanie pod katem wydajnosci. Trzeba dodac konwersje na ekwiwalent macierzowy
-	//- macierz 4x4 mieszczaca w sobie zarowno rotacje jak i translacje
+	
+
+	//Transformation of a vertex by the bone. At first the relative position of a vertex to the bone is computed, when
+	//the bone is in its "rest pose" and then this position is transformed by the final orientation and position of the bone.
+	//A very innefficient way of doing it. The better way would be to convert all the translations and rotation to matrices
+	//and stack them together. Although I intended to keep this as simple as possible - it can not be stressed enough
+	//that this it the worst way of conducting this operation!
 	void TransformVertexByBone(float* vSrc, float* vDst);
 
 };
@@ -237,22 +261,16 @@ public:
 	void Animate(float progress);
 
 
-	//Metoda liczaca aktualna wartosc tranformaty basis
-	//dla kazdej kosci znajdujemy dwie klatki pomiedzy ktorymi
-	//akurat znajduje sie licznik aktualnego frame'a
-	//i liczemy wartosc interpolowana miedzy tymi klatkami
-	//gdzie wspolczynnikiem interpolacji bedzie procentowa 
-	//odleglosc licznika od obu klatek
-	//dla translacyjnej czesci tranformaty uzywamy LERP-a,
-	//zas dla orientacyjnej - SLERP -a, jako, ze ten zachowuje
-	//uniformowe tempo rotacji
+
+	//This method computes the current value of the basis transformation.
+	//For every bone we find two frames between which the current frame counter happens to
+	//be and compute interpolate between them. The interpolation coefficient "t" of this interpolation
+	//is the distance beetween the frame counter and the previous frame divided by the distance of these
+	//two frames. The resulting interpolations (SLERP for orientation and LERP for position) constitute
+	//the current basis transformation.
 	void ComputeCurrBasis();
 
-	//liczenie finalnej orientacji wszystkich kosci
-	//algorytm przebiega tak, ze najpierw kosc jest transformowana o
-	//transformate basis, nastepnie local, nastepnie liczona jest jej pozycja
-	//wzgledem rodzica i na koncu jest transformowana o pozycje ostateczna rodzica
-	//ktora dopiero musimy rekursywnie policzyc
+	//a method computing the final orientations and positions of all the bones
 	void ComputeFinalOrientationPos();
 
 	void Draw(ID3D11DeviceContext* devConPtr);
@@ -261,6 +279,12 @@ public:
 
 	void AssignBoneIndicesToVertexGroups(Object3D* objPtr);
 
+
+	//The algorith is as follows:
+	//Do for every vertex: Transform the vertex local (i.e. starting) position by TransformVertexByBone of every bone
+	//that has any influence (i.e. weight) over it and multiply the result by the bones weight. Sum all the
+	//results to achieve the final vertex position. Basically a weighted sum of all the transformations off all the bones
+	//for that vertex.
 	void MeshDeform(Object3D* objPtr);
 
 };

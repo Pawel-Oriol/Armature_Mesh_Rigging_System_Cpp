@@ -1,16 +1,16 @@
 ﻿//Copyright © 2023 by Pawel Oriol
 
-//A C++ Implementation of The Armature and Mesh Rigging System from scratch.
+//A C++ Implementation of The Armature and Mesh Rigging System "from scratch".
 //A blender file of the used 3D animated model and blender expoters writeen in python by the author are also included in this project.
-//You can watch the demo video of this project under the following adress :
+//You can watch the demo video of this project under the following adress:
 //https://www.youtube.com/watch?v=yJpmEfbqp9k&t=47s
 
-//Uses Direct3D11and DirectXTK(both properties of Microsoft Corp - Visit the DirectXTK subfolder for the respective the license) :
+//Uses Direct3D11 and DirectXTK(both properties of Microsoft Corp - Visit the DirectXTK subfolder for the respective the license):
 //https://github.com/microsoft/DirectXTK
 // 
-//Model& Animation :
-//Megan & Walkcycle2 obtained from mixamo.com :
-//https ://www.mixamo.com/#/?page=1&query=walk&type=Character
+//Model& Animation:
+//Megan & Walkcycle2 obtained from mixamo.com:
+//https://www.mixamo.com/#/?page=1&query=walk&type=Character
 //https://www.youtube.com/watch?v=yJpmEfbqp9k
 
 
@@ -272,7 +272,7 @@ UINT numElements3D = ARRAYSIZE(layout3D);
 ID3D11InputLayout* vertLayout3D;
 
 
-//wrapper do shaderow
+//shader wrappers
 class D3DShader
 {
 public:
@@ -363,7 +363,7 @@ void SetWindowedMode()
 
 
 	RECT wr; //Widow Rectangle
-	wr.left = 100; //tymczasowo na szytwno
+	wr.left = 100; //hardcoded for now
 	wr.top =  100;
 	wr.right = SCR_WIDTH_WINDOWED + wr.left;
 	wr.bottom = SCR_HEIGHT_WINDOWED + wr.top;
@@ -472,7 +472,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	LPSTR lpCmdLine,
 	int nShowCmd)
 {
-	//We must inform The Compositing Window Manager, that we shall decide on the resolution of our window
+	//We must inform The Compositing Window Manager, that we shall be the ones to decide on the resolution of our window
 	//and not him!
 	bool dpiAware = SetProcessDPIAware();
 
@@ -483,7 +483,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	SCR_WIDTH_FS = wrTemp.right - wrTemp.left;
 	SCR_HEIGHT_FS = wrTemp.bottom - wrTemp.top;
 
-	//w trybie okienkowym tworzymy okno kwadratowe o 80% wysokosci aktualnej rozdzielczosci desktopowej
+	//in windowed mode we create a squared window of 80% height of the current desktop resolution
 	SCR_HEIGHT_WINDOWED = (wrTemp.bottom - wrTemp.top) * 0.8;
 	SCR_WIDTH_WINDOWED = SCR_HEIGHT_WINDOWED;
 
@@ -539,7 +539,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	start_time = clock();
 	if (!InitDirectInput(hInstance))
 	{
-		MessageBox(0, "Direct3D Initialization has faile", "Error", MB_OK);
+		MessageBox(0, "Direct3D Initialization has failed", "Error", MB_OK);
 		return 0;
 	}
 	end_time = clock();
@@ -588,7 +588,7 @@ bool InitializeWindow(HINSTANCE hInstance,
 	}
 
 	RECT wr; //Widow Rectangle
-	wr.left = 100; //na razie 'na sztywno'
+	wr.left = 100; //hardcoded for now
 	wr.top = 100;
 	wr.right = width + wr.left;
 	wr.bottom = height + wr.top;
@@ -625,7 +625,7 @@ bool InitializeDirect3D(HINSTANCE hInstance)
 {
 	DXGI_MODE_DESC bufferDesc;
 
-	//Deskryptor buffora
+	
 	ZeroMemory(&bufferDesc, sizeof(DXGI_MODE_DESC));
 
 	bufferDesc.Width = SCR_WIDTH;
@@ -636,7 +636,7 @@ bool InitializeDirect3D(HINSTANCE hInstance)
 	bufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	bufferDesc.Scaling = DXGI_MODE_SCALING_STRETCHED;
 
-	//deskryptor SwapChaina
+	
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
 
 	ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
@@ -652,11 +652,10 @@ bool InitializeDirect3D(HINSTANCE hInstance)
 	//swapChainDesc.Flags =  DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 	UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 #if defined(_DEBUG)
-	//w debug dobrze miec wlaczony poglebiony debug - nieraz bledy w DirectX sa niezwykle "silent"
-	//i znalezienie przyczyny bez poglebionej diagnozy jest wrecz niemozliwe
+	//extended debug comes in handy - a lot of DirectX errors are quite "silent"
 	creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-	//utwórz swapchaina,  device i devicecontext
+	
 	D3D11CreateDeviceAndSwapChain(adapterAndOutputsList[0].adapterPtr, D3D_DRIVER_TYPE_UNKNOWN, NULL, creationFlags, NULL, NULL,
 		D3D11_SDK_VERSION, &swapChainDesc, &SwapChain, &Device, NULL, &DevCon);
 
@@ -665,18 +664,18 @@ bool InitializeDirect3D(HINSTANCE hInstance)
 	debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 #endif
 
-	//wyciagnij backbuffer
+	
 	ID3D11Texture2D* backBuffer;
 	SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
 
 
 
-	//utworz renderTargerView
+	
 	Device->CreateRenderTargetView(backBuffer, NULL, &renderTargetView);
 
 	backBuffer->Release();
 
-	//stworzy buffor depth i stencil
+	
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
 
 	ZeroMemory(&depthStencilDesc, sizeof(D3D11_TEXTURE2D_DESC));
@@ -698,7 +697,7 @@ bool InitializeDirect3D(HINSTANCE hInstance)
 
 
 
-	//ustaw nasz RenderTarget
+	
 	DevCon->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
 
 
@@ -776,7 +775,7 @@ bool InitializeDirect3D(HINSTANCE hInstance)
 	camProjection = XMMatrixPerspectiveFovLH(0.25f * 3.1415, (float)SCR_WIDTH / SCR_HEIGHT, 0.03f, 10000.0f);
 
 
-	//Tymaczasowo. Na Clean Code przyjdzie pora.
+	//Temporary hardcoded. Clean Code hour has not yet come.
 	lights[0].brightness = 0.1;
 	lights[0].dir.x = 0.0;
 	lights[0].dir.y = 0.0;
@@ -823,10 +822,6 @@ bool InitDirectInput(HINSTANCE hInstance)
 
 void DetectInput()
 {
-	//auto start = std::chrono::system_clock::now();
-
-	//clock_t input_time_end = clock();
-
 
 
 	DIMOUSESTATE mouseCurrState;
@@ -863,9 +858,10 @@ void DetectInput()
 	XMVECTOR vec_x = XMVectorSet(1, 0, 0, 0);
 	XMVECTOR vec_y = XMVectorSet(0, 1, 0, 0);
 
-	//Kamera w modelu Eulerowskim, alez bez trzeciej rotacji (bez obrotu wokol osi pokrywajacej sie z kierunkiem patrzenia)
-	//Jako ze przedmiotem tej demonstracji jest zaimplemetnowanie od zera systemu armatury/riga, to przynajmniej tutaj
-	//skorzystamy z pomocy jaka nam oferuje DXMath i nie bedziemy calkiem wynajdywac kola od nowa
+
+	//A good old Euler style camera model, minus the third rotation (the one along the axis parallel to the direction of looking).
+	//Given the fact that this is a demo on how to implement a working armature/rigging system let us, at the very least,
+	//make some use of the very handy XMath lib and not reinvent the wheel altogether
 	XMMATRIX rot_x = XMMatrixRotationAxis(vec_x, camAngles.x);
 	XMMATRIX rot_y = XMMatrixRotationAxis(vec_y, camAngles.y);
 
@@ -914,7 +910,7 @@ void DetectInput()
 bool InitScene()
 {
 	  
-	//tutaj tez "na sztywno" - do poprawy w przyszlosci
+	//again hardcoded
 	camPos.x = -1.228866;
 	camPos.y = 0.765643;
 	camPos.z = 2.368459;
@@ -938,22 +934,22 @@ bool InitScene()
 	HRESULT hr = Device->CreateSamplerState(&samplerDesc, &TexSamplerState);
 
 
-	//tutaj ladujemy armature
+	//load the armature here. The bone model is just plane *.obj, however the armature file format
+	//was just made up by me but should be quite self explanatory nevertheless
 	armature.Load(Device,"models/megan/armature.txt", "models/bone.obj");
 
 	
-	//a tutaj meshe i wagi
+	//load the mesh and its vertex groups. Here again, the vertex_groups are a self explanatory format of mine
 	body.Load(Device, "models/megan/body.obj", true, "models/megan/vertex_groups_body.txt");
 
-	//duzo razy wczytamy te sama texture, ale na potrzeby dydaktyczne niech juz tak zostanie
-	//optymalizacja nie zawsze przeklada sie na czytelnosc
+	//Yeah, We end up reading the same texture a couple of times. However for didactical reasons, let's
+	//leave it as it is. More efficient != always more readable.
 	body.LoadTexture(Device, DevCon, L"models/megan/body_texture.jpg");
 
-	//metoda pomocnicza, aby skojarzyc vertexy z transformujacymi je koscmi poprzez indexy
-	//-wydajniejsze niz poprzez stringi
+	//an auxilary method for linking vertex groups with their respective bones
 	armature.AssignBoneIndicesToVertexGroups(&body);
 
-	//analogicznie reszta modeli
+	//the rest of models loaded in a similar fashion
 	shirt.Load(Device, "models/megan/shirt.obj", true, "models/megan/vertex_groups_shirt.txt");
 	shirt.LoadTexture(Device, DevCon, L"models/megan/body_texture.jpg");
 	armature.AssignBoneIndicesToVertexGroups(&shirt);
@@ -981,28 +977,28 @@ bool InitScene()
 
 void UpdateScene()
 {
-	//zeby sie nie zgubic w scenie
+	//not to get lost in the scene. If you do - uncomment these ;)
 	//printf("cam pos : %f %f %f\n", camPos.x, camPos.y, camPos.z);
 	//printf("cam angles : %f %f\n", camAngles.x, camAngles.y);
 	
 
-	//aktualizacja aktualnej klatki - mozemy regulowac tempo argumentem 'progress'
+	//updates the current frame indicator, which is of a floating type
+	//you can influence the pace of the animation by changing the progress argument
 	armature.Animate(0.65);
 
-	//liczenie aktualnego basis - opis szczegolowy w metodzie
+	//computes the current basis - a detailed description in the method implementation
 	armature.ComputeCurrBasis();
 
-	//liczymy finalne transformaty kosci - opis szczegolowy w metodzie
+	//computes the final transforms of all bones - a detailed description in the implementation of the method of the same name for the bone class
 	armature.ComputeFinalOrientationPos();
 	
-	//transformacja/deformacja mesha przez armature
+	//deforms/transforms the mesh by the armature - a detailed description in the method implementation
 	armature.MeshDeform(&body);
 
-	//musimy na nowo policzyc wektory normalne - mesh zmienil ksztalt
-	//algorytm identyczny co w Blenderze - im wiekszy kat miedzy krawedziami
-	//wychodzacymi z vertexa tym wiekszy wplyw trojkowa na koncowa wartosc wektora normalnego
+	//We must recalculate vector normals, since the mesh has changed shape - a detailed description in the method implementation
 	body.RecalculateNormals();
 
+	//other meshes transformed in an analogous way
 	armature.MeshDeform(&shirt);
 	shirt.RecalculateNormals();
 
@@ -1020,6 +1016,8 @@ void UpdateScene()
 }
 
 
+//the rendering is just the usual Direct3D stuff 
+//- nothing really to add here - should be self explanatory
 void DrawScene()
 {
 
@@ -1240,7 +1238,7 @@ LRESULT CALLBACK WndProc(HWND hwnd_arg,
 				buffer->Release();
 
 
-				//stworzy buffor depth i stencil
+				
 				if (true)
 				{
 					depthStencilView->Release();
@@ -1266,7 +1264,7 @@ LRESULT CALLBACK WndProc(HWND hwnd_arg,
 				}
 
 
-				//ustaw nasz RenderTarget
+				
 				DevCon->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
 
 
@@ -1293,7 +1291,7 @@ LRESULT CALLBACK WndProc(HWND hwnd_arg,
 	case WM_ENTERSIZEMOVE:
 	{
 #ifdef EDIT_STUFF
-		printf("skaluje\n");
+		printf("scaling\n");
 #endif
 		entryResize = true;
 		break;
@@ -1301,7 +1299,7 @@ LRESULT CALLBACK WndProc(HWND hwnd_arg,
 	case WM_EXITSIZEMOVE:
 	{
 #ifdef EDIT_STUFF
-		printf("juz nie skaluje\n");
+		printf("not scaling anymore\n");
 #endif
 		if (SwapChain)
 		{
@@ -1322,7 +1320,7 @@ LRESULT CALLBACK WndProc(HWND hwnd_arg,
 			buffer->Release();
 
 
-			//stworzy buffor depth i stencil
+			
 			if (true)
 			{
 				depthStencilView->Release();
@@ -1348,7 +1346,7 @@ LRESULT CALLBACK WndProc(HWND hwnd_arg,
 			}
 
 
-			//ustaw nasz RenderTarget
+			
 			DevCon->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
 
 

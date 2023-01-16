@@ -45,10 +45,10 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
 
 	input.normal = normalize(input.normal);
 	color = ObjTexture.Sample(ObjSamplerState, input.TexCoord);
-	//tylko kanaly rgb - nie chcemy oswietleniem zniszczyc naszej alphy
-	//ambient na pierwszej pozycji
+	//only rgb - we do not want our lighting to affect the alpha channel
+	//ambient on the first position
 	color.rgb= lights[0].bri* color.rgb;
-	//swiatlo kierunkowe na drugiej pozycji
+	//directional light on the second position
 	color.rgb+=saturate(dot(lights[1].dir,input.normal)*lights[1].bri*ObjTexture.Sample(ObjSamplerState,input.TexCoord).rgb);
 	color.rgb = saturate(color.rgb);
 	return color;

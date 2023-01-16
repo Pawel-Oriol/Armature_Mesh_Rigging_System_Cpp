@@ -1,1 +1,36 @@
-﻿
+﻿  3D_lib.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  d3d_wrappers.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\d3d_wrappers.cpp(130,35): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\d3d_wrappers.cpp(162,35): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+  main.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(487,53): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(491,57): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(497,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(709,23): warning C4244: '=': conversion from 'int' to 'FLOAT', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(710,24): warning C4244: '=': conversion from 'int' to 'FLOAT', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(775,105): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(779,28): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(851,42): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(852,42): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(855,50): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(914,22): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(915,21): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(916,21): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(918,24): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(919,24): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(987,23): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(1036,96): warning C4244: 'argument': conversion from 'double' to 'UINT8', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(1275,35): warning C4244: '=': conversion from 'UINT' to 'FLOAT', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(1276,36): warning C4244: '=': conversion from 'UINT' to 'FLOAT', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(1281,108): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(1357,34): warning C4244: '=': conversion from 'UINT' to 'FLOAT', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(1358,35): warning C4244: '=': conversion from 'UINT' to 'FLOAT', possible loss of data
+C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\Armature_DIRECT3D\src_files\main.cpp(1363,107): warning C4305: 'argument': truncation from 'double' to 'float'
+  Generating Code...
+     Creating library C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\x64\Debug\Armature_DIRECT3D.lib and object C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\x64\Debug\Armature_DIRECT3D.exp
+DirectXTK_debug.lib(pch.obj) : warning LNK4099: PDB 'DirectXTK.pdb' was not found with 'DirectXTK_debug.lib(pch.obj)' or at 'C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\x64\Debug\DirectXTK.pdb'; linking object as if no debug info
+DirectXTK_debug.lib(WICTextureLoader.obj) : warning LNK4099: PDB 'DirectXTK.pdb' was not found with 'DirectXTK_debug.lib(WICTextureLoader.obj)' or at 'C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\x64\Debug\DirectXTK.pdb'; linking object as if no debug info
+  Armature_DIRECT3D.vcxproj -> C:\Users\pawel\Documents\PRACA\PORTFOLIO\GIT_REPOS\ARMATURE_DIRECT3D_REPO\x64\Debug\Armature_DIRECT3D.exe
